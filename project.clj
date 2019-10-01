@@ -18,7 +18,7 @@
                  [org.clojure/tools.namespace "0.2.11"]
                  [http-kit "2.3.0"]
                  [bidi "2.1.5"]
-                 [sablono "0.8.6"]
+                 [lilactown/hx "0.5.3"]
                  [cljsjs/react-dom "16.9.0-0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
