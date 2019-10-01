@@ -21,9 +21,18 @@
       [:span {:style {:font-weight "bold"}} name] "!"]
      [:div [:input {:on-change #(update-name (-> % .-target .-value))}]]]))
 
+(defnc Counter
+  []
+  (let [[count setCount] (hooks/useState 0)]
+    [:<>
+     [:div
+      [:p "You clicked " count " times"]
+      [:button {:onClick #(setCount (inc count))}
+       "Click Me"]]]))
+
 (defn render []
   (react-dom/render
   ;; hx/f transforms Hiccup into a React element.
   ;; We only have to use it when we want to use hiccup outside of `defnc` / `defcomponent`
-   (hx/f [MyComponent {:initial-name "React in CLJS"}])
+   (hx/f [Counter])
    (. js/document getElementById "app")))
