@@ -1,7 +1,17 @@
-(ns chestnut-playground.core)
+(ns chestnut-playground.core
+  (:require
+   cljsjs.react
+   [sablono.core :as html :refer-macros [html]]))
 
 (enable-console-print!)
 
+(defn widget []
+  (html [:div "Hello world!"
+        [:ul (for [n (range 1 10)]
+                [:li {:key n} n])]
+        (html/submit-button "React!")]))
+
 (defn render []
-  (set! (.-innerHTML (js/document.getElementById "app"))
-        "<h1>Hello Chestnut!</h1>"))
+  (js/ReactDOM.render 
+    (widget)
+    (js/document.getElementById "app")))

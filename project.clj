@@ -17,7 +17,9 @@
                  [org.danielsz/system "0.4.1"]
                  [org.clojure/tools.namespace "0.2.11"]
                  [http-kit "2.3.0"]
-                 [bidi "2.1.5"]]
+                 [bidi "2.1.5"]
+                 [sablono "0.8.6"]
+                 [cljsjs/react "16.9.0-0"]]
 
   :plugins [[lein-cljsbuild "1.1.7"]
             [lein-environ "1.1.0"]]
