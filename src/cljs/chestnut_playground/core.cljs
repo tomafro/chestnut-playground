@@ -49,22 +49,26 @@
       [:button {:onClick #(dispatch {:type :inc})} "+"]
       [:button {:onClick #(dispatch {:type :dec})} "-"]]]))
 
+(defn TimerEffect [active time setTime]
+  (hooks/useEffect
+    (let [intervalId (hooks/useIRef nil)]
+      (fn []
+        (if (and active (not @intervalId))
+          (let [previous time
+               start (. js/Date now)]
+            (swap! intervalId #(. js/window setInterval (fn [] (setTime (+ previous (- (. js/Date now) start))) 100))))
+          (swap! intervalId #(. js/window clearInterval @intervalId)))))))
+
 (defnc Timer []
   (let [[time setTime] (hooks/useState 0)
         [active setActive] (hooks/useState false)]
     
-    (hooks/useEffect 
-      (let [intervalId (hooks/useIRef nil)]
-        (fn []
-          (if (and active (not @intervalId))
-            (let [previous time
-                  start (. js/Date now)]
-              (swap! intervalId #(. js/window setInterval (fn [] (setTime (+ previous (- (. js/Date now) start))) 100))))
-            (swap! intervalId #(. js/window clearInterval @intervalId))))))
+    (TimerEffect active time setTime)
+    
     [:<>
-     [:div "Active " (str active) " " (str time)]
-     [:button {:onClick #(setActive true)} "+"]
-     [:button {:onClick #(setActive false)} "-"]]))
+      [:div "Active " (str active) " " (str time)]
+      [:button {:onClick #(setActive true)} "+"]
+      [:button {:onClick #(setActive false)} "-"]]))
 
 
 (defn render []
