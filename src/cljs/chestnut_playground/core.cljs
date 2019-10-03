@@ -51,14 +51,16 @@
 
 (defnc Timer []
   (let [[time setTime] (hooks/useState 0)
-        [active setActive] (hooks/useState false)
-        intervalId (hooks/useIRef nil)]
-        
-    (hooks/useEffect (fn []
-                       (let []
-                         (if active
-                           (swap! intervalId #(. js/window setInterval (fn [] (println intervalId)) 10))
-                           (swap! intervalId #(. js/window clearInterval @intervalId))))))
+        [active setActive] (hooks/useState false)]
+    
+    (hooks/useEffect 
+      (let [intervalId (hooks/useIRef nil)]
+        (fn []
+          (if (and active (not @intervalId))
+            (let [previous time
+                  start (. js/Date now)]
+              (swap! intervalId #(. js/window setInterval (fn [] (setTime (+ previous (- (. js/Date now) start))) 100))))
+            (swap! intervalId #(. js/window clearInterval @intervalId))))))
     [:<>
      [:div "Active " (str active) " " (str time)]
      [:button {:onClick #(setActive true)} "+"]
